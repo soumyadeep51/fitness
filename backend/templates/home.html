@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Coach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e6f0fa, #f4f6f8);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        nav {
+            background: #1f2937;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #f97316;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3b82f6, #14b8a6);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            animation: fadeIn 1s ease-in;
+        }
+
+        main {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: auto;
+            background-image: url('https://images.unsplash.com/photo-1517836359417-1be0a50b36f4?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            z-index: 1;
+        }
+
+        main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        .section {
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.9), rgba(20, 184, 166, 0.7)),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffffff" fill-opacity="0.1" d="M30 20 L40 30 L30 40 L20 30 Z M70 60 L80 70 L70 80 L60 70 Z"/></svg>');
+            background-size: cover, 100px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            animation: slideUp 0.8s ease-out;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #f9fafb;
+        }
+
+        .section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-size: 1.1rem;
+            color: #f9fafb;
+        }
+
+        .section ul li {
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .chart {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .chart:hover {
+            transform: scale(1.05);
+        }
+
+        .cta-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 16px 32px;
+            background: linear-gradient(90deg, #f97316, #ff6b6b);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: bounceIn 1s ease-out, pulseBtn 2s infinite;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 20px rgba(249, 115, 22, 0.5);
+            background: linear-gradient(90deg, #ea580c, #f43f5e);
+        }
+
+        .cta-btn svg {
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1f2937;
+            color: white;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 15px rgba(249, 115, 22, 0.4); }
+            100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .section p, .section ul li {
+                font-size: 1rem;
+            }
+
+            .chart {
+                height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            main {
+                background-attachment: scroll;
+            }
+
+            .cta-btn {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+
+            .cta-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'predict' %}">Prediction</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+    </ul>
+</nav>
+
+<header>
+    <h1>AIVA: The AI Fitness Coach</h1>
+</header>
+
+<main>
+    <div class="section" style="animation-delay: 0.2s;">
+        <h2>What is Fitness and Why It is Important</h2>
+        <p>
+            Fitness is a state of physical and mental well-being achieved through regular exercise, proper nutrition, and adequate rest. It enhances overall health, boosts energy levels, and improves quality of life.
+        </p>
+        <ul>
+            <li><strong>Physical Health:</strong> Regular exercise strengthens muscles, improves cardiovascular health, and reduces the risk of chronic diseases.</li>
+            <li><strong>Mental Well-being:</strong> Fitness promotes the release of endorphins, reducing stress and enhancing mood.</li>
+            <li><strong>Longevity:</strong> An active lifestyle contributes to a longer, healthier life.</li>
+            <li><strong>Social Benefits:</strong> Group activities foster community and connection.</li>
+        </ul>
+        <div class="chart-container">
+            <div class="chart">
+                <canvas id="fitnessBenefitsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-container">
+        <a href="{% url 'predict' %}" class="cta-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                <path d="M11.25 5.337c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.036 1.007-1.875 2.25-1.875S15 2.34 15 3.375c0 .369-.128.713-.349 1.003-.215.283-.401.604-.401.959 0 .332.278.598.61.58 1.91-.114 3.79-.342 5.632-.676a.75.75 0 0 1 .878.645 49.17 49.17 0 0 1 .376 5.452.657.657 0 0 1-.66.664c-.354 0-.675-.186-.958-.401a1.647 1.647 0 0 1-.003-.349c0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959 0 .332-.278.598-.61.58-1.91-.114-3.79-.342-5.632-.676a.75.75 0 0 1-.878.645 49.17 49.17 0 0 1-.376-5.452.657.657 0 0 1 .66-.664c.354 0 .675.186.958.401.215.283.401.604.401.959 0 .332-.278.598-.61.58-1.91-.114-3.79-.342-5.632-.676a.75.75 0 0 1-.878-.645 49.17 49.17 0 0 1-.376-5.452.657.657 0 0 1 .66-.664c.354 0 .675.186.958.401.215.283.401.604.401.959 0 .332-.278.598-.61.58-1.91-.114-3.79-.342-5.632-.676a.75.75 0 0 1-.878-.645 49.17 49.17 0 0 1-.376-5.452.657.657 0 0 1 .66-.664z"/>
+            </svg>
+            Start Your Fitness Journey
+        </a>
+    </div>
+
+    <div class="section" style="animation-delay: 0.4s;">
+        <h2>Healthy Facts</h2>
+        <p>
+            Understanding health trends is crucial for creating effective fitness plans. Our AI analyzes body metrics to identify health patterns.
+        </p>
+        <ul>
+            <li>Approximately 60% of individuals in our dataset are classified as overweight or obese, highlighting the need for targeted interventions.</li>
+            <li>Only 33% fall within the normal BMI range, indicating a significant portion of the population could benefit from fitness programs.</li>
+            <li>Thinness, though less common (7%), requires specialized exercise plans to promote healthy weight gain.</li>
+        </ul>
+        <div class="chart-container">
+            <div class="chart">
+                <canvas id="healthyUnhealthyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" style="animation-delay: 0.6s;">
+        <h2>Fitness-Related Facts</h2>
+        <p>
+            Regular physical activity is key to achieving optimal health and preventing chronic diseases. Our AI provides insights to promote active lifestyles.
+        </p>
+        <ul>
+            <li>Globally, 25% of adults do not meet WHO physical activity guidelines (150 minutes of moderate exercise per week).</li>
+            <li>Strength training, performed by only 20% of adults regularly, boosts metabolism and preserves muscle mass.</li>
+            <li>Regular exercise can reduce the risk of chronic diseases like diabetes and heart disease by up to 50%.</li>
+        </ul>
+        <div class="chart-container">
+            <div class="chart">
+                <canvas id="fitnessActivityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" style="animation-delay: 0.8s;">
+        <h2>About Us</h2>
+        <p>
+            Welcome to AIVA, your AI-powered fitness coach! We are dedicated to helping you achieve your fitness goals with personalized workout plans based on the latest health insights. Our mission is to promote a healthier lifestyle through technology and data-driven solutions.
+        </p>
+        <p>
+            Learn more about our team, technology, and vision by visiting our <a href="{% url 'about' %}" style="color: #f97316; text-decoration: underline;">About Page</a>.
+        </p>
+    </div>
+</main>
+
+<div class="footer">
+    © 2025 AI Fitness Coach | Developed by Prasant using Django & Machine Learning
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Pie chart for Fitness Benefits
+    const fitnessBenefitsCtx = document.getElementById('fitnessBenefitsChart').getContext('2d');
+    new Chart(fitnessBenefitsCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Physical Health', 'Mental Well-being', 'Longevity', 'Social Benefits'],
+            datasets: [{
+                data: [40, 30, 20, 10],
+                backgroundColor: ['#3b82f6', '#f97316', '#14b8a6', '#ff6b6b'],
+                borderColor: ['#fff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                animateScale: true,
+                animateRotate: true,
+                duration: 2000,
+                easing: 'easeOutElastic',
+                delay: (ctx) => ctx.dataIndex * 200
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Benefits of Fitness',
+                    font: { family: 'Poppins', size: 18, weight: 'bold' },
+                    color: '#1f2937'
+                },
+                tooltip: {
+                    backgroundColor: '#3b82f6',
+                    titleFont: { family: 'Poppins' },
+                    bodyFont: { family: 'Poppins' }
+                }
+            }
+        }
+    });
+
+    // Bar chart for Healthy vs. Unhealthy (BMIcase)
+    const healthyUnhealthyCtx = document.getElementById('healthyUnhealthyChart').getContext('2d');
+    new Chart(healthyUnhealthyCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Normal', 'Overweight', 'Obese', 'Severe Obese', 'Thinness'],
+            datasets: [{
+                label: 'Percentage of Population',
+                data: [33, 30, 20, 10, 7],
+                backgroundColor: ['#14b8a6', '#f97316', '#ef4444', '#8b5cf6', '#3b82f6'],
+                borderColor: ['#fff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                duration: 2000,
+                easing: 'easeOutBounce',
+                y: { delay: (ctx) => ctx.dataIndex * 200 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'BMI Category Distribution',
+                    font: { family: 'Poppins', size: 18, weight: 'bold' },
+                    color: '#1f2937'
+                },
+                tooltip: {
+                    backgroundColor: '#3b82f6',
+                    titleFont: { family: 'Poppins' },
+                    bodyFont: { family: 'Poppins' }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Percentage (%)',
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'BMI Category',
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                }
+            }
+        }
+    });
+
+    // Bar chart for Fitness Activity Levels
+    const fitnessActivityCtx = document.getElementById('fitnessActivityChart').getContext('2d');
+    new Chart(fitnessActivityCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Sedentary', 'Moderately Active', 'Highly Active'],
+            datasets: [{
+                label: 'Percentage of Population',
+                data: [25, 50, 25],
+                backgroundColor: ['#ef4444', '#14b8a6', '#3b82f6'],
+                borderColor: ['#fff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                duration: 2000,
+                easing: 'easeOutBounce',
+                y: { delay: (ctx) => ctx.dataIndex * 200 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Fitness Activity Levels',
+                    font: { family: 'Poppins', size: 18, weight: 'bold' },
+                    color: '#1f2937'
+                },
+                tooltip: {
+                    backgroundColor: '#3b82f6',
+                    titleFont: { family: 'Poppins' },
+                    bodyFont: { family: 'Poppins' }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Percentage (%)',
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Activity Level',
+                        font: { family: 'Poppins', size: 14 }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
