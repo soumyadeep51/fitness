@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Your Workout Plan</title>
+    <title>Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -69,7 +69,7 @@
             z-index: 1;
         }
 
-        h1 {
+        h2 {
             text-align: center;
             color: #f8fafc;
             margin-bottom: 30px;
@@ -84,7 +84,7 @@
             color: #d1d5db;
         }
 
-        form input, form select {
+        form input {
             width: 100%;
             padding: 12px;
             margin-top: 5px;
@@ -95,7 +95,7 @@
             font-size: 1rem;
         }
 
-        form input:focus, form select:focus {
+        form input:focus {
             outline: none;
             border-color: #60a5fa;
             box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
@@ -121,7 +121,26 @@
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
         }
 
-        .result {
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #d1d5db;
+        }
+
+        .register-link a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        .messages {
             margin-top: 40px;
             background: linear-gradient(45deg, #1e40af, #2563eb);
             padding: 25px;
@@ -130,58 +149,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
-        .result h2 {
-            margin-top: 0;
-            color: #f8fafc;
-            font-size: 1.8rem;
-        }
-
-        .result p {
+        .messages p {
+            margin: 0;
             color: #e2e8f0;
             font-size: 1.1rem;
             line-height: 1.6;
-        }
-
-        pre {
-            white-space: pre-wrap;
-            font-family: inherit;
-            color: #e2e8f0;
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-btns {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-
-        .nav-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 12px 24px;
-            background: linear-gradient(90deg, #2563eb, #3b82f6);
-            color: #f8fafc;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            transform: scale(1.05);
-            background: linear-gradient(90deg, #1d4ed8, #2563eb);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-        }
-
-        .nav-btn svg {
-            margin-right: 10px;
-            width: 20px;
-            height: 20px;
         }
 
         .footer {
@@ -205,19 +177,8 @@
                 padding: 20px;
             }
 
-            h1 {
+            h2 {
                 font-size: 2rem;
-            }
-
-            .nav-btns {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-btn {
-                width: 100%;
-                text-align: center;
-                padding: 14px;
             }
         }
     </style>
@@ -234,38 +195,26 @@
     </nav>
 
     <div class="container">
-        <h1>Get Your Recommended Workout Plan</h1>
+        <h2>Login</h2>
         
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit" class="btn">Predict Workout Plan</button>
+            <label>Username:</label>
+            <input type="text" name="username" required>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+            <button type="submit" class="btn">Login</button>
         </form>
 
-        {% if result %}
-        <div class="result">
-            <h2>🎯 Your Results</h2>
-            <p><strong>BMI:</strong> {{ result.bmi }} ({{ result.bmicase }})</p>
-            <p><strong>Recommended Plan #{{ result.plan_number }}</strong></p>
-            <pre>{{ result.plan_details }}</pre>
+        <p class="register-link">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
         </div>
         {% endif %}
-
-        <div class="nav-btns">
-            <a href="{% url 'feedback' %}" class="nav-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-                Feedback
-            </a>
-            <a href="{% url 'contact' %}" class="nav-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
-                Contact Us
-            </a>
-        </div>
     </div>
 
     <div class="footer">
@@ -320,7 +269,7 @@
             stars.forEach(star => {
                 star.update();
                 star.draw();
-            });
+6            });
             requestAnimationFrame(animateStars);
         }
 

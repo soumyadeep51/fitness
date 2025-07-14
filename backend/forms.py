@@ -1,5 +1,8 @@
 # forms.py
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Profile
 
 class UserInputForm(forms.Form):
     GENDER_CHOICES = [
@@ -38,3 +41,14 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, label="Your Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}))
     email = forms.EmailField(label="Your Email", widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Type your message here', 'rows': 4}), label="Message")
+
+
+
+class CustomUserRegisterForm(UserCreationForm):
+    age = forms.IntegerField(required=True, label='Age')
+    gender = forms.ChoiceField(choices=Profile.GENDER_CHOICES, required=True, label='Gender')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'age', 'gender', 'password1', 'password2']
+

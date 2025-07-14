@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import UserInputForm, FeedbackForm, ContactForm  # Add ContactForm
+from .forms import CustomUserRegisterForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from .models import Profile
 import joblib
 import numpy as np
 import os
@@ -180,7 +185,7 @@ def home(request):
 
 def about(request):
     return render(request, 'about.html')
-
+@login_required(login_url='/login/')
 def feedback(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -190,7 +195,7 @@ def feedback(request):
     else:
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
-
+@login_required(login_url='/login/')
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -212,3 +217,41 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'contact.html', {'form': form})
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            
+
+            # ✅ Explicitly create the profile
+            Profile.objects.create(
+                user=user,
+                age=form.cleaned_data['age'],
+                gender=form.cleaned_data['gender']
+            )
+
+            messages.success(request, 'Registration successful!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please fix the errors below.')
+    else:
+        form = CustomUserRegisterForm()
+    
+    return render(request, 'register.html', {'form': form})
+  
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, f"Welcome back, {user.username}!")
+            return redirect('home')  # or your main dashboard
+        else:
+            messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'login.html')
+
